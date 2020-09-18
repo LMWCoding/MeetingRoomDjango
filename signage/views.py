@@ -44,7 +44,7 @@ def roomauto(request, location, roomname):
                 # Meeeting in next 1 hr
                 return render(request, "signage/roomfree.html", { "message" : f"{int(timeToNextMtg.seconds/60)}min to next mtg", "roomname" : selectedRoom})
         # more than an hour gap, or no next mtg found
-        return render(request, "signage/roomfree.html", { "message" : "good'Day", "roomname" : selectedRoom})
+        return render(request, "signage/roomfree.html", { "message" : "g'Day", "roomname" : selectedRoom})
 
 
 
@@ -60,4 +60,4 @@ def roommanual(request, location, roomname, custname):
 
         return render(request, "signage/roomoccupied.html", { "custname" : custname, "roomname" : selectedRoom })
     else: 
-        return render(request, "signage/roomfree.html",  {"roomname" : selectedRoom })
+        return render(request, "signage/roomfree.html", { "message" : "g'Day", "roomname" : selectedRoom})
