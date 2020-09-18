@@ -1,0 +1,23 @@
+{% extends "entry/layout.html" %}
+
+{% block body %}
+
+<h1>Signage System</h1>
+
+<h2><a href="{% url 'signage:index' %}">Room Signage</a></h2>
+
+
+<h2><a href="{% url 'admin:index' %}">Enter Data -  Admin</a></h2>
+
+<h1>Current Bookings</h1>
+    <ul>
+        {% for meeting in meetings %}
+            <li>
+
+                    Meeting {{ meeting.room }}: {{ meeting.start }} to {{ meeting.custname }}
+
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

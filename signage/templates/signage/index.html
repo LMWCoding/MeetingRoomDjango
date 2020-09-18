@@ -1,0 +1,39 @@
+{% extends "signage/layout.html" %}
+
+{% block body %}
+
+    <h1>Page used by Signages at Mtg Room</h1>
+
+    <h2>Manual Usage</h2>
+    For manual entry of room name, and customer name,
+
+    <ul> 
+        <li> Room in used  <a href="dummy/NameofRoom/Cust Name"> signage/NameOfRoom/Customer Name</a></block> </li>
+        <li> Room NOT used. Put ...  <a href="dummy/NameofRoom/..."> signage/NameOfRoom/...</a></block> </li>
+        
+
+    </ul>
+
+    <h2>Automatic Usage</h2>
+    Meeting Room usage info is obtained from DB.  
+    Enter info using the Admin page
+    Page is automatically refreshed every 30 secs
+<!-- Manual Room List
+     <ul>
+        <li><a href="Singapore/Intelligent CCC"> ip/signage/Singapore/Intelligent CCC</a></li>
+        <li><a href="Singapore/Hainan"> ip/signage/Singapore/Hainan</a></li>
+        <li><a href="Singapore/Jeju-do"> ip/signage/Singapore/Jeju-do</a></li>
+    </ul>
+ -->
+ <!-- Automatic Room List -->
+    <ul>
+        {% for room in roomList %}
+            <li>
+                <a href="{% url 'signage:roomauto' room.location room.name %}">
+                Location {{ room.location}} - {{ room.name}}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+    
+{% endblock %}

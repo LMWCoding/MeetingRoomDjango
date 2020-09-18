@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Meeting</title>
+  <script type="text/javascript">
+    fetch('http://localhost:8081/light?led=000000')
+    .then(function() {
+      // success response data
+      })
+    .catch(function() {
+      //server returns any errors
+      });
+  </script>
+  <link href="{% static 'signage/style3.css' %}" rel="stylesheet" type="text/css" > 
+</head>
+<body background="{% static 'signage/dark.jpg' %}">
+
+
+<h1>Customer Solution Center</h1>
+<h2>The URL is wrong</h2>
+<div class="footer">
+        <p>...</p>
+      </div>
+
+
+
+</body>
+</html>
