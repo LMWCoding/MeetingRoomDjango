@@ -23,23 +23,29 @@ def roomauto(request, location, roomname):
     except:
         return render(request, "signage/roomnotfound.html")
 
-#     currentMtg = Meeting.objects.filter( room = room.id )
+#    currentMtg = Meeting.objects.filter( room = room.id )
 #    currentMtg = Meeting.objects.filter( room = room.id  , start__lte= datetime.datetime.now()).exclude( end__lte= datetime.datetime.now())
-
     currentMtg = Meeting.objects.filter( room = room.id  , start__lte= datetime.datetime.now(tz=pytz.UTC),  end__gte= datetime.datetime.now(tz=pytz.UTC))
-
-    
+    nextMtg = Meeting.objects.filter(room = room.id, start__gte = datetime.datetime.now(tz=pytz.UTC), end__gte = datetime.datetime.now(tz=pytz.UTC)).order_by('start')
 
     if (len(currentMtg)  != 0 ):
         # assumption is there is only one match.  The data entry should be clean, have no duplicate usage of room
-        custname =  (currentMtg[0].custname)
-        # print(custname)
-        # print (currentMtg[0].room.location)
-        # print (currentMtg[0].room.name)
-        
-        return render(request, "signage/roomoccupied.html", { "custname" : custname, "roomname" : selectedRoom })
+        return render(request, "signage/roomoccupied.html", { "custname" : currentMtg[0].custname, "roomname" : selectedRoom })
     else: 
-        return render(request, "signage/roomfree.html", { "roomname" : selectedRoom})
+        if (len(nextMtg) != 0):
+            # if upcoming mtg is in an hour, show
+            # nextMtgTime = nextMtg[0].start
+            # currentTime = datetime.datetime.now(tz=pytz.UTC)
+            timeToNextMtg = nextMtg[0].start - datetime.datetime.now(tz=pytz.UTC)
+            if (timeToNextMtg < datetime.timedelta(minutes=15)):
+                # Meeeting in next 15 min
+                return render(request, "signage/roomoccupied.html", { "custname" : nextMtg[0].custname, "roomname" : nextMtg[0].room.name})
+            elif (timeToNextMtg < datetime.timedelta(hours=1)):
+                # Meeeting in next 1 hr
+                return render(request, "signage/roomfree.html", { "message" : f"{int(timeToNextMtg.seconds/60)}min to next mtg", "roomname" : selectedRoom})
+        # more than an hour gap, or no next mtg found
+        return render(request, "signage/roomfree.html", { "message" : "good'Day", "roomname" : selectedRoom})
+
 
 
 def roommanual(request, location, roomname, custname):
