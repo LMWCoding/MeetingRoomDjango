@@ -30,7 +30,7 @@ def roomauto(request, location, roomname):
 
     if (len(currentMtg)  != 0 ):
         # assumption is there is only one match.  The data entry should be clean, have no duplicate usage of room
-        return render(request, "signage/roomoccupied.html", { "custname" : currentMtg[0].custname, "roomname" : selectedRoom })
+        return render(request, "signage/roomoccupied.html", { "occupied" : "true" ,"custname" : currentMtg[0].custname, "roomname" : selectedRoom })
     else: 
         if (len(nextMtg) != 0):
             # if upcoming mtg is in an hour, show
@@ -39,12 +39,12 @@ def roomauto(request, location, roomname):
             timeToNextMtg = nextMtg[0].start - datetime.datetime.now(tz=pytz.UTC)
             if (timeToNextMtg < datetime.timedelta(minutes=15)):
                 # Meeeting in next 15 min
-                return render(request, "signage/roomoccupied.html", { "custname" : nextMtg[0].custname, "roomname" : nextMtg[0].room.name})
+                return render(request, "signage/roomoccupied.html", { "occupied" : "true", "custname" : nextMtg[0].custname, "roomname" : nextMtg[0].room.name})
             elif (timeToNextMtg < datetime.timedelta(hours=1)):
                 # Meeeting in next 1 hr
-                return render(request, "signage/roomfree.html", { "message" : f"{int(timeToNextMtg.seconds/60)}min to next mtg", "roomname" : selectedRoom})
+                return render(request, "signage/roomoccupied.html", { "occupied" : "false", "custname" : f"{int(timeToNextMtg.seconds/60)}min to next mtg", "roomname" : selectedRoom})
         # more than an hour gap, or no next mtg found
-        return render(request, "signage/roomfree.html", { "message" : "g'Day", "roomname" : selectedRoom})
+        return render(request, "signage/roomoccupied.html", { "occupied" : "false", "custname" : "g'Day", "roomname" : selectedRoom})
 
 
 
@@ -58,6 +58,6 @@ def roommanual(request, location, roomname, custname):
 
         # print(custname)
 
-        return render(request, "signage/roomoccupied.html", { "custname" : custname, "roomname" : selectedRoom })
+        return render(request, "signage/roomoccupied.html", { "occupied" : "true", "custname" : custname, "roomname" : selectedRoom })
     else: 
-        return render(request, "signage/roomfree.html", { "message" : "g'Day", "roomname" : selectedRoom})
+        return render(request, "signage/roomoccupied.html", { "occupied" : "false", "custname" : "g'Day", "roomname" : selectedRoom})

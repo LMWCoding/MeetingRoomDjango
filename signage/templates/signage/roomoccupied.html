@@ -2,18 +2,47 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Meeting - Used</title>
+        <title>Meeting</title>
+        <link rel="shortcut icon" href="{% static 'entry/images/favicon.ico' type='image/x-icon' %}">
         <script type="text/javascript">
-        fetch('http://localhost:8081/light?led=002050')
-        .then(function() {
-            // success response data
-            })
-        .catch(function() {
-            //server returns any errors
+
+            var occupied = "{{occupied}}";
+            console.log('OCC' + occupied);
+
+            if (occupied === 'true') { fetch('http://localhost:8081/light?led=002050').catch(function() {}) } else
+            { fetch('http://localhost:8081/light?led=000000').catch(function() {})}
+ 
+            if (!localStorage.getItem('clockdisplay')) {
+                    localStorage.setItem('clockdisplay', 'false');
+            }
+
+            var showclock = localStorage.getItem('clockdisplay');
+
+            document.addEventListener('DOMContentLoaded', function() {  
+                var x = document.getElementById('TouchClock'); 
+                x.style.opacity = (showclock === 'true') ? '1.0' : '0.0';
+                
+                x.onclick = function () { 
+                    if (showclock === 'true') { x.style.opacity = '0.0' ; showclock =  'false'; localStorage.setItem('clockdisplay', 'false') } 
+                    else { x.style.opacity = '1.0' ; showclock =  'true'; localStorage.setItem('clockdisplay', 'true')} 
+                };   
             });
-        setTimeout(function() {
-            location.reload();
-        }, 30000);
+
+            function showTime(){
+                var date = new Date();
+                document.getElementById("TouchClock").innerText = date.toLocaleTimeString("en-gb", 
+                    { hour12: true, hour: "numeric", minute: "2-digit"
+                    } );
+            }
+
+            document.addEventListener('DOMContentLoaded', function() { showTime(); });
+
+            setTimeout(function() {
+                location.reload();
+            }, 30000);
+
+        
+
         </script>
         <link href="{% static 'signage/style3.css' %}" rel="stylesheet" type="text/css" > 
     </head>
@@ -21,8 +50,15 @@
     <body background="{% static 'signage/dark.jpg' %}">
         <h1>Customer Solution Center</h1>
         <h2>{{ custname }}</h2>
+
+
+
         <div class="footer">
                 <p>{{roomname}}</p>
         </div>
+
+        <div> <p id="TouchClock"></p></div>
+
+
     </body>
 </html>
