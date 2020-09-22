@@ -30,7 +30,7 @@
 
             function showTime(){
                 var date = new Date();
-                document.getElementById("TouchClock").innerText = date.toLocaleTimeString("en-gb", 
+                document.getElementById("TouchClock").innerText = date.toLocaleTimeString("en-uk", 
                     { hour12: true, hour: "numeric", minute: "2-digit"
                     } );
             }
@@ -49,16 +49,9 @@
 
     <body background="{% static 'signage/dark.jpg' %}">
         <h1>Customer Solution Center</h1>
-        <h2>{{ custname }}</h2>
-
-
-
-        <div class="footer">
-                <p>{{roomname}}</p>
-        </div>
-
-        <div> <p id="TouchClock"></p></div>
-
-
+<!--         <h2>{{ custname }}</h2> -->
+        <div class="middle"><p>{{ custname }}</p></div>
+        <div ><p id="footerright">{{roomname}}</p></div>
+        <div ><p id="TouchClock"></p></div>    
     </body>
 </html>
