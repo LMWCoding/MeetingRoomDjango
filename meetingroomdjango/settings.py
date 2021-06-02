@@ -83,6 +83,8 @@ DATABASES = {
     }
 }
 
+# This is added for Django 3.2
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
